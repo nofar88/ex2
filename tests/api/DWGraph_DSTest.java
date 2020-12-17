@@ -81,6 +81,7 @@ public class DWGraph_DSTest {
             graph.getNode(i).setInfo("info " + i);
 
         }
+        graph.addNode(new NodeData(50));
         assertEquals(100, graph.nodeSize());
         assertEquals(100, graph.getV().size());
         assertEquals(5, graph.getNode(5).getKey());
@@ -178,7 +179,7 @@ public class DWGraph_DSTest {
         }
         long end =new java.util.Date().getTime();
         double dt= (end-start)/1000.0;
-        assertTrue(dt < 10);
+        assertTrue(dt < 15);
 
     }
 

@@ -13,16 +13,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GraphPanel extends JPanel {
-    private int _ind;
-    private ArenaUs arena;
+
+    private Arena arena;
     private gameClient.util.Range2Range _w2f;
     private game_service server;
 
-    GraphPanel(String title) {
-        int _ind = 0;
-    }
 
-    public void update(ArenaUs arena, game_service server) {
+
+    public void update(Arena arena, game_service server) {
         this.arena = arena;
         this.server = server;
         updateFrame();
@@ -37,25 +35,22 @@ public class GraphPanel extends JPanel {
     }
 
     public void paint(Graphics g) {
-        int w = this.getWidth();
-        int h = this.getHeight();
-        g.clearRect(0, 0, w, h);
-        //	updateFrame();
+        try {
+            int w = this.getWidth();
+            int h = this.getHeight();
+            g.clearRect(0, 0, w, h);
 
-        drawGraph(g);
-        drawPokemons(g);
-        drawAgants(g);
-        drawInfo(g);
-        drawData(g);
-    }
-    private void drawInfo(Graphics g) {
-        List<String> str = arena.get_info();
-        String dt = "none";
-        for (int i = 0; i < str.size(); i++) {
-            g.drawString(str.get(i) + " dt: " + dt, 100, 60 + i * 20);
+
+            drawGraph(g);
+            drawPokemons(g);
+            drawAgants(g);
+            drawData(g);
         }
+        catch (Exception ex){
 
+        }
     }
+
     private void drawGraph(Graphics g) {
         directed_weighted_graph gg = arena.getGraph();
         LinkedList<edge_data> edges = new LinkedList<>();
@@ -129,12 +124,14 @@ public class GraphPanel extends JPanel {
         geo_location dest = gg.getNode(e.getDest()).getLocation();
         geo_location s0 = this._w2f.world2frame(src);
         geo_location d0 = this._w2f.world2frame(dest);
-        //g.drawLine((int)s0.x(), (int)s0.y(), (int)d0.x(), (int)d0.y());
         drawThickLine(g, (int)s0.x(), (int)s0.y(), (int)d0.x(), (int)d0.y(), 2, Color.GRAY);
-        //g.drawString(e.getSrc() + " > " + e.getDest(), (int) s0.x(), (int)s0.y());
     }
 
-    // https://www.rgagnon.com/javadetails/java-0260.html
+
+    /**
+    A function that draws a thick line
+    https://www.rgagnon.com/javadetails/java-0260.html
+     */
     public void drawThickLine(
             Graphics g, int x1, int y1, int x2, int y2, int thickness, Color c) {
         // The thick line is in fact a filled polygon
@@ -165,6 +162,10 @@ public class GraphPanel extends JPanel {
 
         g.fillPolygon(xPoints, yPoints, 4);
     }
+
+    /**
+     A function that writes the time left for the game and the agents' score
+     */
 
     private void drawData(Graphics g)
     {

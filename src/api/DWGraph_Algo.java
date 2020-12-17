@@ -20,26 +20,26 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     @Override
     public void init(directed_weighted_graph g) {
         this.graph = g;
-    }
+    }//O(1)
 
     @Override
-    public directed_weighted_graph getGraph() {
+    public directed_weighted_graph getGraph() {//O(1)
 
         return graph;
     }
 
     @Override
-    public directed_weighted_graph copy() {
+    public directed_weighted_graph copy() {//O(v+e), e-edges v-nodes
         DWGraph_DS graphcopy = new DWGraph_DS();
-        for (node_data nodes : graph.getV()) {// רציל על כל הקודקודים שבגרף המקורי מעתיקים אותם לגרף החדש יחד עם הטאג והאינפו
+        for (node_data nodes : graph.getV()) {// Run on all the vertices in the original graph, copy them to the new graph along with the tag and info
             int key = nodes.getKey();
             graphcopy.addNode(new NodeData(key));
             graphcopy.getNode(key).setInfo(graph.getNode(key).getInfo());
             graphcopy.getNode(key).setTag(graph.getNode(key).getTag());
             graphcopy.getNode(key).setLocation(graph.getNode(key).getLocation());
         }
-        for (node_data nodes : graph.getV()) { // רצים על כל הקודקודים
-            for (edge_data edges : graph.getE(nodes.getKey())) { // עוברים על כל הצלעות היוצאות של קודקוד מסוים ומחברים ( בגלל שעוברים על כל הקודקודים זה יעשה גם את הצלעות הנכנסות
+        for (node_data nodes : graph.getV()) { // Run on all the vertices
+            for (edge_data edges : graph.getE(nodes.getKey())) { // Go through all the outgoing edges of a particular vertex and connect (because going over all the vertices it will do the incoming edges as well)
                 graphcopy.connect(edges.getSrc(), edges.getDest(), edges.getWeight());
             }
         }
@@ -53,21 +53,21 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             return true;
         }
 
-        viseted1 = new HashMap<>();// יצירת אש מאפ חדש ריצה על כל הקודקודים של הגרף להכניס אותם לתוך האש מאפ ולהתחל אותם לפולס כי לא בקרו בהם
+        viseted1 = new HashMap<>();// Create a new HashMap, run on all the vertices of the graph and insert them into the HashMap and start them to false because they were not visited
         for (node_data node : graph.getV()) {
             viseted1.put(node.getKey(), false);
         }
-        DFS(graph.getV().iterator().next().getKey()); //שולחים לפונקציה של DFS את הקודקוד הראשון
+        DFS(graph.getV().iterator().next().getKey()); //Send the first vertex to the DFS function
 
         // Call for reverse direction
-        viseted2 = new HashMap<>(); // אתחול אש מאפ נוסף שרץ על כל הקודקודים מאתחל אותם להיות פולס
+        viseted2 = new HashMap<>(); // initialization another HashMap , running on all vertices initializes them to be false
         for (node_data node : graph.getV()) {
             viseted2.put(node.getKey(), false);
         }
-        reverseDFS(graph.getV().iterator().next().getKey()); // שולח לפונקציה של DFS ההפוכה כלומר הצלעות בה הפוכות אבל מתחילים מאותו קודקוד
+        reverseDFS(graph.getV().iterator().next().getKey()); // Sends to the function of the inverted DFS, its edges are inverted but starting from the same vertex
 
         for (node_data nodes : graph.getV()) {
-            if (!viseted1.get(nodes.getKey()) || !viseted2.get(nodes.getKey()))// מספיק שאחד מאשאפים החזיר פולס כלומר לא ביקרו בו משני הכיוונים
+            if (!viseted1.get(nodes.getKey()) || !viseted2.get(nodes.getKey()))// It is enough that one of the HashMap returned false meaning that it was not visited from both directions
                 return false;
         }
 
@@ -76,27 +76,27 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
     }
 
-    private void DFS(int key) {
+    private void DFS(int key) { // O(V+E)
 
         Stack<Integer> stack = new Stack<>(); // Create a stack for DFS
         stack.push(key);
 
         while (!stack.empty()) {
-            key = stack.pop();// להוציא את הראשון מהמחסנית
+            key = stack.pop();// Remove the first one from the stack
 
-            if (!viseted1.get(key)) {// אם לא בקרו בו
-                viseted1.put(key, true);// מסמנים את הקודקוד שאיתו מתחילים בטרו כלומר בקרנו בו
+            if (!viseted1.get(key)) {// If not visit it
+                viseted1.put(key, true);// Mark the vertex we start with true, we visited it
             }
 
-            for (edge_data edge_data : graph.getE(key)) {// עוברים על כל הצלעות היוצאות של הקודקוד הנוכחי
-                int v = edge_data.getDest();// תפיסת השכן עצמו
-                if (!viseted1.get(v)) // אם השכן שלו הקודקוד הנוכחי לא בקרו בו, אז להכניס אותו למחסנית
+            for (edge_data edge_data : graph.getE(key)) {// Go through all the outgoing edges of the current vertex
+                int v = edge_data.getDest();// Perception of the neighbor himself
+                if (!viseted1.get(v)) // If the neighbor of the current vertex has not visited it, then put it in the stack
                     stack.push(v);
             }
         }
     }
 
-    private void reverseDFS(int key) {
+    private void reverseDFS(int key) { // O(V+E)
 
         Stack<Integer> stack = new Stack<>();  // Create a stack for DFS
         stack.push(key);
@@ -106,12 +106,12 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             key = stack.pop();
 
             if (!viseted2.get(key)) {
-                viseted2.put(key, true);// מסמנים את הקודקוד שאיתו מתחילים בטרו כלומר בקרנו בו
+                viseted2.put(key, true);// Mark the vertex we start with true, we visited it
             }
 
 
-            for (node_data i : ((DWGraph_DS) graph).edges.get(graph.getNode(key)).get(DWGraph_DS.Direction.IN).keySet()) { // עוברים על כל השכנים הנכנסים של הקודקוד הנוכחי
-                int v = i.getKey(); // תופסים את הערך שלהם
+            for (node_data i : ((DWGraph_DS) graph).edges.get(graph.getNode(key)).get(DWGraph_DS.Direction.IN).keySet()) { // Go through all the incoming neighbors of the current vertex
+                int v = i.getKey(); // Perceive their value
                 if (!viseted2.get(v))
                     stack.push(v);
             }
@@ -119,7 +119,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     }
 
     @Override
-    public double shortestPathDist(int src, int dest) {
+    public double shortestPathDist(int src, int dest) {//O(E*LOG2(V))
         if (graph.getV().size() == 0) {
             return -1;
         }
@@ -166,7 +166,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     }
 
     @Override
-    public List<node_data> shortestPath(int src, int dest) {
+    public List<node_data> shortestPath(int src, int dest) {//O(E*LOG2(V))
         if (graph.getNode(src) == null || graph.getNode(dest) == null) return null;
         List<node_data> path = new ArrayList<>();// Start a new list
         List<node_data> pathRe = new ArrayList<>(); // Initialize another list that we will enter in the correct order
@@ -189,13 +189,8 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     }
 
     @Override
-    public boolean save(String file) {
+    public boolean save(String file) {//O(v+e)
         try {
-//            Gson gson = new GsonBuilder()
-//                    .setPrettyPrinting()
-//                    .enableComplexMapKeySerialization()// אם יש אובייקט יותר מורכב אז שישמור אותו ולא את הסטרינג שלו
-//                    .serializeNulls()
-//                    .create();
 
             JsonArray edges = new JsonArray();
             JsonArray nodes = new JsonArray();
@@ -234,14 +229,10 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     }
 
     @Override
-    public boolean load(String file) {
+    public boolean load(String file) {//O(v+e)
         try {
             Gson gson = new GsonBuilder()
                     .setPrettyPrinting()
-//                    .enableComplexMapKeySerialization()// אם יש אובייקט יותר מורכב אז שישמור אותו ולא את הסטרינג שלו
-//                    .registerTypeAdapter(node_data.class, new NodeDataDeserialize())
-//                    .registerTypeAdapter(edge_data.class, new EdgeDataDeserialize())
-//                    .registerTypeAdapter(geo_location.class, new GeoLocationDeserialize())
                     .create();
 
             File myObj = new File(file);
@@ -249,11 +240,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             String str = "";
             while (myReader.hasNext())
                 str += myReader.nextLine() + "\n";
-//
-//            this.graph = gson.fromJson(str, DWGraph_DS.class);
-//            this.graph =  copy();// בחזרה שהוא מעתיק אז שיעתיק את אותו כתובת בזיכרון
-//
-//            myReader.close();
+
             JsonObject jsonObject = gson.fromJson(str, JsonObject.class);
 
             DWGraph_DS graphDs = new DWGraph_DS();

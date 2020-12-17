@@ -13,8 +13,6 @@ public class Pokemon {
     private double value;
     private int type;
     private Point3D position;
-    private double min_dist;
-    private int min_ro;
     private boolean caught;
 
     public Pokemon(edge_data edge, double value, int type, Point3D position) {
@@ -22,8 +20,6 @@ public class Pokemon {
         this.value = value;
         this.type = type;
         this.position = position;
-        min_dist = -1;
-        min_ro = -1;
         this.caught = false;
     }
 
@@ -37,16 +33,6 @@ public class Pokemon {
                 '}';
     }
 
-    public static Pokemon initFromJson(String json) {
-        Pokemon ans = null;
-        try {
-            JSONObject p = new JSONObject(json);
-            int id = p.getInt("id");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ans;
-    }
 
     public edge_data getEdge() {
         return edge;
@@ -54,14 +40,6 @@ public class Pokemon {
 
     public void setEdge(edge_data edge) {
         this.edge = edge;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
     }
 
     public int getType() {
@@ -76,16 +54,23 @@ public class Pokemon {
         return position;
     }
 
-    public void setPosition(Point3D position) {
-        this.position = position;
-    }
-
+    /**
+    A function that checks whether there is already an agent targeting the specific Pokemon or not
+     */
     public boolean isCaught() {
         return caught;
     }
 
     public void setCaught(boolean caught) {
         this.caught = caught;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
     }
 
     public String toJson() {

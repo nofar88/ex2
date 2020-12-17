@@ -11,7 +11,6 @@ import gameClient.util.Point3D;
 import org.json.JSONObject;
 
 public class Agent {
-    public static final double EPS = 0.0001;
     private static int count = 0;
     private static int seed = 3331;
     private int id;
@@ -36,7 +35,7 @@ public class Agent {
         this.speed = 0;
     }
 
-    public void update(String json) {
+    public void update(String json) {// Updates the agent according to the data he received from the server
         JSONObject line;
         try {
             line = new JSONObject(json);
@@ -57,7 +56,6 @@ public class Agent {
                 this.setSpeed(speed);
                 this.setNextNode(dest);
                 this.setPoints(value);
-//                this.setWarning(false);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,21 +88,17 @@ public class Agent {
 
     public boolean setNextNode(int dest) {
         int src = this.currentNode.getKey();
-        this.currentEdge = graph.getEdge(src, dest);// מכניס לצע הנוכחית את הצע בין סורס לדסט
-        return currentEdge != null;// אם הצלע הנוכחית קיימת אז זה טרו אוטומטית
+        this.currentEdge = graph.getEdge(src, dest);// Inserts the current between src to dest into the current edge
+        return currentEdge != null;// If the current side exists then it is true automatically
     }
 
     public void setCurrNode(int src) {
         this.currentNode = graph.getNode(src);
     }
 
-    public boolean isMoving() {
-        return this.currentEdge != null;
-    }
 
-    public String toString1() {
-        return toJSON();
-    }
+
+
 
     @Override
     public String toString() {
@@ -133,9 +127,6 @@ public class Agent {
         return position;
     }
 
-    public void setPosition(geo_location position) {
-        this.position = position;
-    }
 
     public double getPoints() {
         return points;
@@ -166,23 +157,6 @@ public class Agent {
         this.currnetPokemon.setCaught(true);
     }
 
-    public void set_SDT(long ddtt) {
-        long ddt = ddtt;
-        if (this.currentEdge != null) {
-            double w = getCurrentEdge().getWeight();
-            geo_location dest = graph.getNode(getCurrentEdge().getDest()).getLocation();
-            geo_location src = graph.getNode(getCurrentEdge().getSrc()).getLocation();
-            double distFromSrcToDest = src.distance(dest);
-            double distFromPosToDest = position.distance(dest);
-            if (this.getCurrnetPokemon().getEdge() == this.getCurrentEdge()) {
-                distFromPosToDest = currnetPokemon.getPosition().distance(this.position);
-            }
-            double norm = distFromPosToDest / distFromSrcToDest;
-            double dt = w * norm / this.getSpeed();
-            ddt = (long) (1000.0 * dt);
-        }
-        this.set_sg_dt(ddt);
-    }
 
     public edge_data getCurrentEdge() {
         return this.currentEdge;
@@ -218,15 +192,9 @@ public class Agent {
         return gson.toJson(this);
     }
 
-    public void setCurrentEdge(edge_data currentEdge) {
-        this.currentEdge = currentEdge;
-    }
 
     public boolean isWarning() {
         return warning;
     }
 
-    public void setWarning(boolean warning) {
-        this.warning = warning;
-    }
 }
