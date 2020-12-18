@@ -1,6 +1,6 @@
-package api;
-
+import api.*;
 import gameClient.util.Point3D;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -206,7 +206,7 @@ public class DWGraph_AlgoTest {
 
         DWGraph_Algo algo = new DWGraph_Algo();
         algo.init(graph);
-        assertEquals(new EdgeData(10, 3, 4), graph.getEdge(3, 4));
+        Assertions.assertEquals(new EdgeData(10, 3, 4), graph.getEdge(3, 4));
 //        assertEquals(16, algo.shortestPathDist(1, 4));
         assertTrue(algo.save("graph2.json"));
         assertTrue(algo.load("graph2.json"));
