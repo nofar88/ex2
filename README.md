@@ -10,7 +10,7 @@
  2. `EdgeData` - A class that implements edge_data and represents a single edge.
  3. `DWGraph_DS` - A class that implements weighted_graph and represents a weighted directional graph that can contain multiple nodes and edges. we used HashMap data structure because the methods of this data structure have really good complexity that helped us be efficient, for example add, delete, and other functions all on average of O(1).
  
-    4. `DWGraph_algo` - A class that impements dw_graph_algorithms and executes and computes algorithms on graphs.
+ 4. `DWGraph_algo` - A class that impements dw_graph_algorithms and executes and computes algorithms on graphs.
     
 
 ## Remarks & notes:
