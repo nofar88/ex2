@@ -23,7 +23,7 @@ public class DWGraph_AlgoTest {
         graph.connect(4, 3, 1);
         graph.connect(3, 5, 7);
         graph.connect(5, 1, 1);
-        graph.connect(1, 5, 2);
+        graph.connect(1 , 5, 2);
 
         DWGraph_Algo algo = new DWGraph_Algo();
         algo.init(graph);

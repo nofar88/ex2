@@ -12,7 +12,7 @@ public class DWGraph_DSTest {
         DWGraph_DS graph = new DWGraph_DS();
         graph.addNode(new NodeData(1));
         graph.addNode(new NodeData(2));
-        graph.addNode(new NodeData(3));
+        graph.addNode(new NodeData(3 ));
         graph.addNode(new NodeData(4));
         graph.addNode(new NodeData(5));
         graph.connect(1, 2, 3);
